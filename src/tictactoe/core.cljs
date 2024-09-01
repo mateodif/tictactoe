@@ -1,6 +1,7 @@
 (ns tictactoe.core
   (:require ["react-dom/client" :refer [createRoot]]
-            [reagent.core :as r]))
+            [reagent.core :as r]
+            [clojure.string :as str]))
 
 (def board-size 3)
 (def tile-count (* board-size board-size))
@@ -49,7 +50,7 @@
     (cond-> new-state
       (win? (:tiles new-state) player) (-> (update-in [:score player] inc)
                                            (assoc :tiles initial-tiles)
-                                           (assoc :game-over (str (name player) " won!")))
+                                           (assoc :game-over (str (-> player name str/capitalize) " won!")))
 
       (tie? (:tiles new-state)) (-> (assoc :tiles initial-tiles)
                                     (assoc :game-over "It's a tie!")))))
