@@ -2,8 +2,11 @@
   (:require ["react-dom/client" :refer [createRoot]]
             [reagent.core :as r]))
 
+(def board-size 3)
+(def tile-count (* board-size board-size))
+
 (def initial-tiles
- (zipmap (range 9) (repeat nil)))
+  (zipmap (range tile-count) (repeat nil)))
 
 (defonce store
   (r/atom {:tiles initial-tiles
@@ -17,21 +20,28 @@
 (defn next-player [tiles]
   (if (even? (moves tiles)) :x :o))
 
+(def row-combos
+  (partition board-size (keys initial-tiles)))
+
+(def col-combos
+  (apply map vector row-combos))
+
+(def diagonal-combos
+  [(range 0 tile-count (inc board-size))
+   (range (dec board-size) (dec tile-count) (dec board-size))])
+
 (def win-combos
-  [[0 1 2] [3 4 5] [6 7 8]              ; Rows
-   [0 3 6] [1 4 7] [2 5 8]              ; Columns
-   [0 4 8] [2 4 6]                      ; Diagonals
-   ])
+  (concat row-combos col-combos diagonal-combos))
 
 (defn win? [tiles player]
   (some (fn [combo]
-         (every? #(= (get tiles %) player) combo))
-       win-combos))
+          (every? #(= (get tiles %) player) combo))
+        win-combos))
 
 (defn tie? [tiles]
   (and (not (win? tiles :x))
        (not (win? tiles :o))
-       (= (moves tiles) 9)))
+       (= (moves tiles) tile-count)))
 
 (defn make-move [old-state tile-id]
   (let [player (next-player (:tiles old-state))
@@ -52,7 +62,7 @@
     [:div
      [:div.score.x "X: " (:x score)]
      [:div.score.o "O: " (:o score)]
-     [:div.board
+     [:div.board {:style {:grid-template-columns (str "repeat(" board-size ", 1fr)")}}
       (for [[tile-id move] tiles]
         ^{:key tile-id}
         [:div.square {:class move
@@ -62,16 +72,7 @@
                           (swap! store make-move tile-id)))}
          move])]]))
 
-
 (defonce root (createRoot (js/document.getElementById "app")))
 
 (defn ^:dev/after-load init! []
   (.render root (r/as-element [app])))
-
-(comment
-  (win? {0 :x, 1 :o, 2 :o,
-         3 :o, 4 :x, 5 :o,
-         6 :x, 7 :o, 8 nil}
-        :o)
-
-  )
