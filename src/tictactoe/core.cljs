@@ -50,13 +50,13 @@
       (js/alert game-over)
       (swap! store dissoc :game-over))
     [:div
-     [:div "State: " @store]
-     [:div.score "X: " (:x score)]
-     [:div.score "O: " (:o score)]
+     [:div.score.x "X: " (:x score)]
+     [:div.score.o "O: " (:o score)]
      [:div.board
       (for [[tile-id move] tiles]
         ^{:key tile-id}
-        [:div.square {:on-click
+        [:div.square {:class move
+                      :on-click
                       (fn [_]
                         (when-not move
                           (swap! store make-move tile-id)))}

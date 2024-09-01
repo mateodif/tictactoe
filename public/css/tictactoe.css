@@ -1,7 +1,16 @@
+body {
+  margin: 0;
+}
+
 .board {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-rows: 1fr;
+  background: #f9f9f9;
+  margin: 4vw;
+  padding: 1vw;
+  border: 1px solid #eee;
+  box-shadow: 0px 15px 10px -15px rgba(0, 0, 0, 0.2);
 }
 
 .board::before {
@@ -17,8 +26,28 @@
   grid-column: 1 / 1;
 }
 
-.board > * {
-  background: rgba(0,0,0,0.1);
-  border: 1px black solid;
+.square {
+  display: block;
+  text-align: center;
+  font-size: 25vw;
+  line-height: 25vw;
+  color: #777;
+  float: left;
+  border: 1px solid #ddd;
+  background: #fff;
 }
 
+.x {
+  background: #d9f4ff;
+}
+
+.o {
+  background: #ffedd9;
+}
+
+.score {
+  padding-left: 2vw;
+  font-family: Consolas, monospace;
+  font-weight: bold;
+  font-size: 6vw;
+}
