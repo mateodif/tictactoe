@@ -33,36 +33,34 @@
        (not (win? tiles :o))
        (= (moves tiles) 9)))
 
+(defn make-move [old-state tile-id]
+  (let [player (next-player (:tiles old-state))
+        new-state (assoc-in old-state [:tiles tile-id] player)]
+    (cond-> new-state
+      (win? (:tiles new-state) player) (-> (update-in [:score player] inc)
+                                           (assoc :tiles initial-tiles)
+                                           (assoc :game-over (str (name player) " won!")))
+
+      (tie? (:tiles new-state)) (-> (assoc :tiles initial-tiles)
+                                    (assoc :game-over "It's a tie!")))))
+
 (defn app []
-  (let [{:keys [tiles]} @store]
+  (let [{:keys [tiles score game-over]} @store]
+    (when game-over
+      (js/alert game-over)
+      (swap! store dissoc :game-over))
     [:div
-     [:div
-      "State: " @store]
-     [:div.score
-      "X: " (get-in @store [:score :x])]
-     [:div.score
-      "O: " (get-in @store [:score :o])]
+     [:div "State: " @store]
+     [:div.score "X: " (:x score)]
+     [:div.score "O: " (:o score)]
      [:div.board
       (for [[tile-id move] tiles]
-        [:div {:on-click
-               (fn [_]
-                 (when (not move)
-                   (swap! store assoc-in [:tiles tile-id] (next-player tiles))))}
-         move])]
-     (cond
-       (win? tiles :x) (do
-                         (swap! store update-in [:score :x] inc)
-                         (js/alert "X won!")
-                         (swap! store assoc :tiles initial-tiles))
-
-       (win? tiles :o) (do
-                         (swap! store update-in [:score :o] inc)
-                         (js/alert "O won!")
-                         (swap! store assoc :tiles initial-tiles))
-
-       (tie? tiles) (do
-                      (js/alert "It's a tie")
-                      (swap! store assoc :tiles initial-tiles)))]))
+        ^{:key tile-id}
+        [:div.square {:on-click
+                      (fn [_]
+                        (when-not move
+                          (swap! store make-move tile-id)))}
+         move])]]))
 
 
 (defonce root (createRoot (js/document.getElementById "app")))
