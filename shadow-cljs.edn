@@ -1,8 +1,11 @@
 ;; shadow-cljs configuration
-{:source-paths ["src" "dev"]
+{:source-paths ["src" "test"]
  :dependencies [[reagent "1.2.0"]]
  :builds {:app {:target :browser
                 :output-dir "public/js"
                 :devtools {:reload-strategy :full}
-                :modules {:main {:init-fn tictactoe.core/init!}}}}
- :dev-http {4000 "public"}}
+                :modules {:main {:init-fn tictactoe.core/init!}}}
+          :test {:target :browser-test
+                 :test-dir "out/test"}}
+ :dev-http {4000 "public"
+            3001 "out/test"}}
