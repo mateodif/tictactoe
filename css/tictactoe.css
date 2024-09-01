@@ -1,0 +1,52 @@
+body {
+  margin: 0;
+}
+
+.board {
+  display: grid;
+  grid-auto-rows: 1fr;
+  background: #f9f9f9;
+  padding: 1vw;
+  border: 1px solid #eee;
+  box-shadow: 0px 15px 10px -15px rgba(0, 0, 0, 0.2);
+  max-width: 70vh;
+  max-height: 70vh;
+  margin: 3vw auto;
+}
+
+.board::before {
+  content: '';
+  padding-bottom: 100%;
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+.board > *:first-child {
+  grid-row: 1 / 1;
+  grid-column: 1 / 1;
+}
+
+.square {
+  display: block;
+  text-align: center;
+  font-size: 15vh;
+  line-height: 20vh;
+  color: #777;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.x {
+  background: #d9f4ff;
+}
+
+.o {
+  background: #ffedd9;
+}
+
+.score {
+  padding-left: 2vh;
+  font-family: Consolas, monospace;
+  font-weight: bold;
+  font-size: 4vh;
+}
