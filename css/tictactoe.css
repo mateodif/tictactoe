@@ -29,11 +29,12 @@ body {
 .square {
   display: block;
   text-align: center;
-  font-size: 15vh;
-  line-height: 20vh;
+  font-size: clamp(1.5rem, 20vh, 25vw);
+  line-height: 1;
   color: #777;
   border: 1px solid #ddd;
   background: #fff;
+  aspect-ratio: 1;
 }
 
 .x {
