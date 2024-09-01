@@ -6,6 +6,8 @@ Tic-tac-toe implementation made with ClojureScript, shadow-cljs and Reagent as p
 
 ## Usage
 
+You can try it out here: https://mateodif.github.io/tictactoe/
+
 To run this app, you'll need `npm` and `shadow-cljs` installed.
 From your command line:
 
